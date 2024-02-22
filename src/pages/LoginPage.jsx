@@ -35,9 +35,9 @@ function LoginPage() {
         <form
           onSubmit={onSubmit}
         >
-          <input type="email" {...register("email", { required: true })}
+          <input type="text" {...register("dni", { required: true })}
             className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
-            placeholder='Email'
+            placeholder='DNI'
           />
           {errors.email && <p className='text-red-500'>email is required</p>}
           <input type="password" {...register("password", { required: true })}
@@ -45,7 +45,7 @@ function LoginPage() {
             placeholder='Password'
           />
           {errors.password && <p className='text-red-500'>password is required</p>}
-          <button className="mt-2" type="submit">Login</button>
+          <button className="bg-sky-500 text-white px-4 py-2 rounded-md my-2" type="submit">Login</button>
         </form>
 
         <p className="mt-5 flex gap-x-2 justify-between">
