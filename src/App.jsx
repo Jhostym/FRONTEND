@@ -15,6 +15,7 @@ import { AuthProvider } from "./context/AuthContext"
 import { TaskProvider } from "./context/TaskContext"
 import Navbar from "./components/Navbar"
 import { BoletaProvider } from "./context/BoletasContext"
+import BoletasPage from "./pages/BoletasPage"
 
 
 function App() {
@@ -34,7 +35,10 @@ function App() {
                   <Route path="/add-task" element={<TaskFormPage />} />
                   <Route path="/tasks/:id" element={<TaskFormPage />} />
                   <Route path="/profile" element={<ProfileTask />} />
-                  <Route path="/boletas" element={<BoletasFormPage />} />
+
+                  <Route path="/add-boletas" element={<BoletasFormPage />} />
+                  <Route path="/boletas" element={<BoletasPage />} />
+
                 </Route>
               </Routes>
             </main>

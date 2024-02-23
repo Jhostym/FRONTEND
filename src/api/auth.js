@@ -6,3 +6,5 @@ export const loginRequest = (user) => axios.post(`/v2/login`, user);
 
 export const verifyTokenRequest = () => axios.get(`/v2/verify`);
 
+export const getProfileRequest = () => axios.get(`/v2/profile`);
+

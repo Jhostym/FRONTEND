@@ -1,5 +1,5 @@
 import { createContext, useState, useContext, useEffect } from "react";
-import { registerRequest } from '../api/auth';
+import { getProfileRequest, registerRequest } from '../api/auth';
 import { loginRequest } from '../api/auth';
 import { verifyTokenRequest } from "../api/auth";
 import Cookies from 'js-cookie';
@@ -21,6 +21,8 @@ export const AuthProvider = ({ children }) => {
   const [errors, setErrors] = useState([]);
 
   const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState([]);
+
 
   const signup = async (user) => {
     try {
@@ -41,6 +43,15 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(true)
     } catch (error) {
       setErrors(error.response.data)
+    }
+  }
+
+  const getProfile = async () => {
+    try {
+      const res = await getProfileRequest();
+      setProfile(res.data)
+    } catch (error) {
+      console.error(error)
     }
   }
 
@@ -96,6 +107,8 @@ export const AuthProvider = ({ children }) => {
       signup,
       signin,
       logout,
+      getProfile,
+      profile,
       user,
       loading,
       isAuthenticated,

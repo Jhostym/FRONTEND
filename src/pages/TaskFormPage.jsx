@@ -1,52 +1,19 @@
 import { useForm } from 'react-hook-form'
 import { useTask } from '../context/TaskContext';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect } from 'react';
-
-import dayjs from 'dayjs'
-import utc from 'dayjs/plugin/utc'
-
-dayjs.extend(utc)
+import { useNavigate } from 'react-router-dom';
 
 
 function TaskFormPage() {
 
-  const { register, handleSubmit, setValue } = useForm()
-  const { createTask, getTask, updateTask } = useTask()
+  const { register, handleSubmit } = useForm()
+  const { createTask } = useTask()
   const navigate = useNavigate()
-  const params = useParams()
-
-  useEffect(() => {
-    const loadTask = async () => {
-      if (params.id) {
-        const task = await getTask(params.id);
-        setValue("title", task.title);
-        setValue("description", task.description);
-        setValue(
-          "date",
-          task.date ? dayjs(task.date).utc().format("YYYY-MM-DD") : ""
-        );
-      }
-    };
-    loadTask();
-
-  }, []);
 
   const onSubmit = handleSubmit((data) => {
-    const dataValid = {
-      ...data,
-      date: data.date ? dayjs.utc(data.date).format() : dayjs.utc().format()
-    };
-    if (params.id) {
-      updateTask(params.id, dataValid);
-    } else {
-      createTask(dataValid);
-    }
-    navigate("/tasks");
-  }
-  );
-
-
+    createTask(data);
+    navigate('/boletas')
+  })
+  
   return (
     <div className='flex h-[calc(100vh-100px)] items-center justify-center'>
       <div className='bg-zinc-800 max-w-md w-full p-10 rounded-md'>

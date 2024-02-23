@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 
-import { createBoletasRequest, getBoletasRequest, updateBoletasRequest } from "../api/Boletas";
+import { createBoletasRequest, getBoletasRequest } from "../api/Boletas";
 
 const BoletaContext = createContext();
 
@@ -11,9 +11,10 @@ export const useBoleta = () => {
   }
   return context;
 }
-
 export function BoletaProvider({ children }) {
+  
   const [boletas, setBoletas] = useState([]);
+
 
   const getBoletas = async () => {
     try {
@@ -29,21 +30,11 @@ export function BoletaProvider({ children }) {
     console.log(res)
   }
 
-  const updateTask = async (id, task) => {
-    try {
-      await updateBoletasRequest(id, task);
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-
   return (
     <BoletaContext.Provider value={{
       boletas,
       createBoletas,
       getBoletas,
-      updateTask,
     }}>
       {children}
     </BoletaContext.Provider>
