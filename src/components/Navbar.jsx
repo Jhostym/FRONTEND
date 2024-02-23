@@ -8,7 +8,7 @@ function Navbar() {
   return (
     <nav className="bg-zinc-700 my-3 flex justify-between py-5 px-10 ronunded-lg">
       <Link to={
-        isAuthenticated ? "/tasks" : "/"
+        isAuthenticated ? "/boletas" : "/"
       }>
         <h1 className="text-2xl font-bold">TRANSPORTES J</h1>
       </Link>
@@ -20,7 +20,7 @@ function Navbar() {
                 BIENVENIDO {user.name}
               </li>
               <li>
-                <Link to="/add-task" className="bg-indigo-500 px-4 py-1 rounded-sm" >Add Tasks</Link>
+                <Link to="/add-boletas" className="bg-indigo-500 px-4 py-1 rounded-sm" >Add Boletas</Link>
               </li>
               <li>
                 <Link className="bg-red-500 px-4 py-1 rounded-sm" to="/" onClick={() => {

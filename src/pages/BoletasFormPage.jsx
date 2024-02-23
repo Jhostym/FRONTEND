@@ -25,8 +25,7 @@ function BoletasFormPage() {
     const formData = new FormData();
     formData.append('dni', data.dni);
     formData.append('mes', data.mes);
-    formData.append('año', data.año);
-
+    formData.append('year', data.year);
     formData.append('image', selectedImage); // Agrega la imagen al FormData
 
     try {
@@ -40,6 +39,7 @@ function BoletasFormPage() {
       console.error('Error:', error);
     }
   });
+
 
   return (
     <div className='flex h-[calc(100vh-100px)] items-center justify-center'>
@@ -77,11 +77,11 @@ function BoletasFormPage() {
             <option value="Diciembre">Diciembre</option>
           </select>
 
-
-          <label htmlFor="año">Año</label>
+          <label htmlFor="year">Año</label>
           <select
-            type="año" name="año"
-            {...register("año")}
+            rows="3"
+            placeholder="año"
+            {...register("year")}
             className='w-full bg-zinc-700 text-white px-4 py-2 rounded-mb my-2'
           >
             <option value="2023">2023</option>

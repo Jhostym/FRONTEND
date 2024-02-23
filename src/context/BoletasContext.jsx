@@ -25,8 +25,8 @@ export function BoletaProvider({ children }) {
     }
   }
 
-  const createBoletas = async (task) => {
-    const res = await createBoletasRequest(task);
+  const createBoletas = async (boletas) => {
+    const res = await createBoletasRequest(boletas);
     console.log(res)
   }
 
