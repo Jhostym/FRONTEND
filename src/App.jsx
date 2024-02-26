@@ -1,5 +1,5 @@
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom"
 
 import LoginPage from "./pages/LoginPage"
 import TaskPage from "./pages/TaskPage"
@@ -17,19 +17,17 @@ import { BoletaProvider } from "./context/BoletasContext"
 import BoletasPage from "./pages/BoletasPage"
 import RegisterPage from "./pages/RegisterPage"
 
-
 function App() {
   return (
     <AuthProvider>
       <BoletaProvider>
         <TaskProvider>
-          <BrowserRouter>
+          <Router>
             <main className="container mx-auto px-2">
               <Navbar />
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<LoginPage />} />
-
                 <Route path="/register" element={<RegisterPage />} />
 
                 <Route element={<ProtectedRoute />}>
@@ -38,18 +36,16 @@ function App() {
                   <Route path="/tasks/:id" element={<TaskFormPage />} />
                   <Route path="/profile" element={<ProfileTask />} />
 
-
                   <Route path="/add-boletas" element={<BoletasFormPage />} />
                   <Route path="/boletas" element={<BoletasPage />} />
-
                 </Route>
               </Routes>
             </main>
-          </BrowserRouter>
+          </Router>
         </TaskProvider>
       </BoletaProvider>
-    </AuthProvider >
-  )
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;
