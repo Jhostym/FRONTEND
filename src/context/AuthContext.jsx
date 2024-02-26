@@ -1,12 +1,8 @@
-import { createContext, useState, useContext, useEffect } from "react";
-import { getProfileRequest, registerRequest } from '../api/auth';
-import { loginRequest } from '../api/auth';
-import { verifyTokenRequest } from "../api/auth";
-import Cookies from 'js-cookie';
+import { createContext, useContext, useEffect, useState } from "react";
+import { loginRequest, registerRequest, verifyTokenRequest } from "../api/auth";
+import Cookies from "js-cookie";
 
-
-
-export const AuthContext = createContext();
+const AuthContext = createContext();
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -15,106 +11,85 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [errors, setErrors] = useState([]);
-
   const [loading, setLoading] = useState(true);
-  const [profile, setProfile] = useState([]);
 
+  useEffect(() => {
+    const checkLogin = async () => {
+      try {
+        const token = Cookies.get("token");
+        if (!token) {
+          setIsAuthenticated(false);
+          setLoading(false);
+          return;
+        }
+
+        const res = await verifyTokenRequest(token);
+        if (!res.data) {
+          setIsAuthenticated(false);
+          setLoading(false);
+          return;
+        }
+
+        setUser(res.data);
+        setIsAuthenticated(true);
+        setLoading(false);
+      } catch (error) {
+        setErrors(["Error verifying token"]);
+        setIsAuthenticated(false);
+        setLoading(false);
+      }
+    };
+    checkLogin();
+  }, []);
 
   const signup = async (user) => {
     try {
-      const res = await registerRequest(user)
-      console.log(res.data)
-      setUser(res.data)
-      setIsAuthenticated(true)
+      const res = await registerRequest(user);
+      if (res.status === 200) {
+        setUser(res.data);
+        setIsAuthenticated(true);
+        Cookies.set("token", res.data.token, { secure: true, sameSite: "none" });
+      }
     } catch (error) {
-      setErrors(error.response.data)
+      setErrors(["Error registering user"]);
     }
-  }
+  };
 
   const signin = async (user) => {
     try {
-      const res = await loginRequest(user)
-      console.log(res.data)
-      setUser(res.data)
-      setIsAuthenticated(true)
+      const res = await loginRequest(user);
+      setUser(res.data);
+      setIsAuthenticated(true);
+      Cookies.set("token", res.data.token, { secure: true, sameSite: "none" });
     } catch (error) {
-      setErrors(error.response.data)
+      setErrors(["Error logging in"]);
     }
-  }
-
-  const getProfile = async () => {
-    try {
-      const res = await getProfileRequest();
-      setProfile(res.data)
-    } catch (error) {
-      console.error(error)
-    }
-  }
+  };
 
   const logout = () => {
-    Cookies.remove('token')
-    setIsAuthenticated(false)
-    setUser(null)
-  }
-
-
-  useEffect(() => {
-    if (errors.length > 0) {
-      const timer = setTimeout(() => {
-        setErrors([])
-      }, 1000)
-      return () => clearTimeout(timer)
-    }
-
-  }, [errors]);
-
-
-  useEffect(() => {
-
-    async function checkLogin() {
-      const cookies = Cookies.get();
-      if (!cookies.token) {
-        setIsAuthenticated(false)
-        setLoading(false)
-        return setUser(null);
-      }
-      try {
-        const res = await verifyTokenRequest(cookies.token)
-        if (!res.data) {
-          setIsAuthenticated(false)
-          setLoading(false)
-          return
-        }
-        setIsAuthenticated(true)
-        setUser(res.data)
-        setLoading(false)
-      } catch (error) {
-        setIsAuthenticated(false)
-        setUser(null)
-        setLoading(false)
-      }
-    }
-    checkLogin()
-  }, []);
+    Cookies.remove("token");
+    setUser(null);
+    setIsAuthenticated(false);
+  };
 
   return (
-
-    <AuthContext.Provider value={{
-      signup,
-      signin,
-      logout,
-      getProfile,
-      profile,
-      user,
-      loading,
-      isAuthenticated,
-      errors,
-    }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        signup,
+        signin,
+        logout,
+        isAuthenticated,
+        errors,
+        loading,
+      }}
+    >
       {children}
     </AuthContext.Provider>
-  )
-}
+  );
+};
+
+export default AuthContext;

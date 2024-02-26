@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 //import { useTask } from '../context/TaskContext';
 import { useBoleta } from '../context/BoletasContext'
 import { useNavigate, useParams } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 
 function BoletasFormPage() {
@@ -12,7 +13,7 @@ function BoletasFormPage() {
   const { createBoletas, updateBoletas } = useBoleta()
   const navigate = useNavigate()
   const params = useParams()
-
+  const { user } = useAuth();
 
   const [selectedImage, setSelectedImage] = useState(null); // Estado local para almacenar la imagen seleccionada
 
@@ -40,6 +41,11 @@ function BoletasFormPage() {
     }
   });
 
+    // Verificar si el usuario es admin
+    if (user.role !== 'admin') {
+      navigate('/boletas');
+      return null; // Evitar que el resto del componente se renderice si el usuario no es admin
+    }
 
   return (
     <div className='flex h-[calc(100vh-100px)] items-center justify-center'>

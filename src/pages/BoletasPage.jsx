@@ -7,7 +7,6 @@ function BoletaPage() {
   useEffect(() => {
     getBoletas()
   }, [])
-  console.log(boletas)
   if (boletas.length === 0) return (<h1>No tasks</h1>)
   return (
     <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-2">
