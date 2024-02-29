@@ -13,7 +13,7 @@ function Navbar() {
   return (
     <nav className="bg-zinc-700 my-3 py-5 px-10 rounded-lg md:flex md:justify-between md:items-center">
       <div className="flex items-center justify-between">
-        <Link to={isAuthenticated ? "/boletas" : "/"}>
+        <Link to={isAuthenticated ? "/" : "/"}>
           <h1 className="text-2xl font-bold">TRANSPORTES J</h1>
         </Link>
         <button
@@ -38,12 +38,21 @@ function Navbar() {
         </button>
       </div>
       <ul
-        className={`${
-          menuOpen ? "block" : "hidden"
-        } md:flex md:gap-x-2 md:items-center md:justify-center`}
+        className={`${menuOpen ? "block" : "hidden"
+          } md:flex md:gap-x-2 md:items-center md:justify-center`}
       >
         {isAuthenticated ? (
+
           <>
+            <li>
+              <Link
+                to="/boletas"
+                className=" px-3 py-2 rounded-sm block md:inline-block text-sm md:text-base"
+              >
+                Boletas
+              </Link>
+            </li>
+
             {user.role === "admin" && ( // Verificar si el usuario tiene el rol "admin"
               <li>
                 <Link
@@ -71,7 +80,7 @@ function Navbar() {
             <li>
               <Link
                 to="/login"
-                className="bg-indigo-500 px-3 py-2 rounded-sm block md:inline-block text-sm md:text-base"
+                className=" px-3 py-2 rounded-sm block md:inline-block text-sm md:text-base"
               >
                 Login
               </Link>

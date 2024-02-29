@@ -26,11 +26,11 @@ function App() {
             <main className="container mx-auto px-2">
               <Navbar />
               <Routes>
-                <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
 
                 <Route element={<ProtectedRoute />}>
+                <Route path="/" element={<HomePage />} />
                   <Route path="/tasks" element={<TaskPage />} />
                   <Route path="/add-task" element={<TaskFormPage />} />
                   <Route path="/tasks/:id" element={<TaskFormPage />} />

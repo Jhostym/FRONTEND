@@ -6,7 +6,7 @@ import { useEffect } from "react";
 
 function RegisterPage() {
 
-  const { register, handleSubmit, formState: { errors }, } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
   const { signup, errors: registerErrors, isAuthenticated } = useAuth();
 
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ function RegisterPage() {
   }
 
   useEffect(() => {
-    if (isAuthenticated) navigate("/tasks")
+    if (isAuthenticated) navigate("/")
 
   }, [isAuthenticated]);
 

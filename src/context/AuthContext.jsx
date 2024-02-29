@@ -1,4 +1,5 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { useEffect } from "react";
+import { createContext, useContext, useState } from "react";
 import { loginRequest, registerRequest, verifyTokenRequest } from "../api/auth";
 import Cookies from "js-cookie";
 
@@ -16,34 +17,15 @@ export const AuthProvider = ({ children }) => {
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // clear errors after 5 seconds
   useEffect(() => {
-    const checkLogin = async () => {
-      try {
-        const token = Cookies.get("token");
-        if (!token) {
-          setIsAuthenticated(false);
-          setLoading(false);
-          return;
-        }
-
-        const res = await verifyTokenRequest(token);
-        if (!res.data) {
-          setIsAuthenticated(false);
-          setLoading(false);
-          return;
-        }
-
-        setUser(res.data);
-        setIsAuthenticated(true);
-        setLoading(false);
-      } catch (error) {
-        setErrors(["Error verifying token"]);
-        setIsAuthenticated(false);
-        setLoading(false);
-      }
-    };
-    checkLogin();
-  }, []);
+    if (errors.length > 0) {
+      const timer = setTimeout(() => {
+        setErrors([]);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [errors]);
 
   const signup = async (user) => {
     try {
@@ -51,10 +33,10 @@ export const AuthProvider = ({ children }) => {
       if (res.status === 200) {
         setUser(res.data);
         setIsAuthenticated(true);
-        Cookies.set("token", res.data.token, { secure: true, sameSite: "none" });
       }
     } catch (error) {
-      setErrors(["Error registering user"]);
+      console.log(error.response);
+      setErrors(error.response.data);
     }
   };
 
@@ -63,9 +45,9 @@ export const AuthProvider = ({ children }) => {
       const res = await loginRequest(user);
       setUser(res.data);
       setIsAuthenticated(true);
-      Cookies.set("token", res.data.token, { secure: true, sameSite: "none" });
     } catch (error) {
-      setErrors(["Error logging in"]);
+      console.log(error.response);
+      setErrors(error.response.data);
     }
   };
 
@@ -74,6 +56,30 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setIsAuthenticated(false);
   };
+
+  useEffect(() => {
+    const checkLogin = async () => {
+      const cookies = Cookies.get();
+      if (!cookies.token) {
+        setIsAuthenticated(false);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const res = await verifyTokenRequest(cookies.token);
+        console.log(res);
+        if (!res.data) return setIsAuthenticated(false);
+        setIsAuthenticated(true);
+        setUser(res.data);
+        setLoading(false);
+      } catch (error) {
+        setIsAuthenticated(false);
+        setLoading(false);
+      }
+    };
+    checkLogin();
+  }, []);
 
   return (
     <AuthContext.Provider

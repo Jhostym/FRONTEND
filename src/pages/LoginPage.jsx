@@ -17,7 +17,7 @@ function LoginPage() {
   });
 
   useEffect(() => {
-    if (isAuthenticated) navigate("/boletas")
+    if (isAuthenticated) navigate("/")
 
   }, [isAuthenticated]);
 
@@ -37,18 +37,14 @@ function LoginPage() {
             className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
             placeholder='DNI'
           />
-          {errors.email && <p className='text-red-500'>email is required</p>}
+          {errors.dni && <p className='text-red-500'>Porfavor ingrese un correo</p>}
           <input type="password" {...register("password", { required: true })}
             className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
             placeholder='Password'
           />
-          {errors.password && <p className='text-red-500'>password is required</p>}
+          {errors.password && <p className='text-red-500'>Porfavor ingrese una contraseña</p>}
           <button className="bg-sky-500 text-white px-4 py-2 rounded-md my-2" type="submit">Login</button>
         </form>
-
-        <p className="mt-5 flex gap-x-2 justify-between">
-          Don't have an account? <Link to='/register' className='text-sky-500'>Sign up</Link>
-        </p>
 
       </div>
     </div>
