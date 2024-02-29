@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 import { createBoletasRequest, getBoletasRequest } from "../api/Boletas";
 
@@ -26,8 +26,12 @@ export function BoletaProvider({ children }) {
   }
 
   const createBoletas = async (boletas) => {
-    const res = await createBoletasRequest(boletas);
-    console.log(res)
+    try {
+      const res = await createBoletasRequest(boletas);
+      console.log(res);
+    } catch (error) {
+      console.log(error.response);
+    }
   }
 
   return (

@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
     if (errors.length > 0) {
       const timer = setTimeout(() => {
         setErrors([]);
-      }, 1000);
+      }, 2000);
       return () => clearTimeout(timer);
     }
   }, [errors]);
@@ -46,7 +46,6 @@ export const AuthProvider = ({ children }) => {
       setUser(res.data);
       setIsAuthenticated(true);
     } catch (error) {
-      console.log(error.response);
       setErrors(error.response.data);
     }
   };
@@ -68,7 +67,6 @@ export const AuthProvider = ({ children }) => {
 
       try {
         const res = await verifyTokenRequest(cookies.token);
-        console.log(res);
         if (!res.data) return setIsAuthenticated(false);
         setIsAuthenticated(true);
         setUser(res.data);

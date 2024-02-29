@@ -3,16 +3,15 @@ import { useForm } from 'react-hook-form';
 
 //import { useTask } from '../context/TaskContext';
 import { useBoleta } from '../context/BoletasContext'
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 
 function BoletasFormPage() {
 
   const { register, handleSubmit } = useForm()
-  const { createBoletas, updateBoletas } = useBoleta()
+  const { createBoletas } = useBoleta()
   const navigate = useNavigate()
-  const params = useParams()
   const { user } = useAuth();
 
   const [selectedImage, setSelectedImage] = useState(null); // Estado local para almacenar la imagen seleccionada
@@ -20,7 +19,6 @@ function BoletasFormPage() {
   const handleImageChange = (e) => {
     setSelectedImage(e.target.files[0]); // Actualiza el estado con el archivo seleccionado
   };
-
 
   const onSubmit = handleSubmit(async (data) => {
     const formData = new FormData();
@@ -30,29 +28,24 @@ function BoletasFormPage() {
     formData.append('image', selectedImage); // Agrega la imagen al FormData
 
     try {
-      if (params.id) {
-        await updateBoletas(params.id, formData);
-      } else {
-        await createBoletas(formData);
-      }
+      await createBoletas(formData);
       navigate('/boletas');
     } catch (error) {
       console.error('Error:', error);
     }
   });
 
-    // Verificar si el usuario es admin
-    if (user.role !== 'admin') {
-      navigate('/boletas');
-      return null; // Evitar que el resto del componente se renderice si el usuario no es admin
-    }
+  // Verificar si el usuario es admin
+  if (user.role !== 'admin') {
+    navigate('/boletas');
+    return null; // Evitar que el resto del componente se renderice si el usuario no es admin
+  }
 
   return (
     <div className='flex h-[calc(100vh-100px)] items-center justify-center'>
       <div className='bg-zinc-800 max-w-md w-full p-10 rounded-md'>
+
         <form onSubmit={onSubmit} encType="multipart/form-data" >
-
-
           <label htmlFor="dni">DNI</label>
           <input
             type="text"
